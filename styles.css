@@ -3,6 +3,13 @@ body {
   background-color: #fff;
   text-align: center;
 }
+#timer {
+  font-size: larger;
+  font-weight: bold;
+}
+#current-state {
+  font-size: x-large;
+}
 .button-container {
   margin: auto;
   width: 80%;
