@@ -59,6 +59,10 @@ let nicknames = [];
 let isPlaying = false;
 let currentName = 0;
 
+let timeLimit = 10; //time to complete in minutes
+let time;
+let timerInterval;
+
 function start() {
     if (!isPlaying) {
         currentName = 0;
@@ -69,6 +73,9 @@ function start() {
             document.getElementById(i).style.backgroundColor = "#efefef";
         }
         shuffle();
+        timeLimit = document.querySelector('input[name="difficulty"]:checked').value;
+        time = timeLimit * 60;
+        timerInterval = setInterval(getTime, 1000);
         score.innerHTML = "0";
         currentState.innerHTML = nicknames[currentName];
     }
@@ -77,6 +84,7 @@ function start() {
 function stop() {
     if (isPlaying) {
         isPlaying = false;
+        clearInterval(timerInterval);
         currentState.innerHTML = "Press \"Start\" to begin.";
     }
 }
@@ -100,6 +108,7 @@ function check(guess) {
         if (nicknames.length === 0) {
             currentState.innerHTML = "You got them all!";
             isPlaying = false;
+            clearInterval(timerInterval);
         } else {
             currentState.innerHTML = nicknames[currentName];
         }
@@ -130,4 +139,19 @@ function shuffle() {
         const j = Math.floor(Math.random() * (i + 1));
         [nicknames[i], nicknames[j]] = [nicknames[j], nicknames[i]];
     }
+}
+
+function getTime() {
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+    if (seconds === "00" && minutes === 0) {
+        currentState.innerHTML = "Time ran out!";
+        isPlaying = false;
+        clearInterval(timerInterval);
+    }
+    time--;
+    timer.innerHTML = minutes + ":" + seconds;
 }

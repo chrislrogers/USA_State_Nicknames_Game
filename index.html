@@ -12,9 +12,15 @@
 <body>
   <h1>Can you find the US state from its nickname?</h1>
   <div class="game-container">
+    <input type="radio" id="hard" name="difficulty" value="3">
+    <label for="hard">Hard</label>
+    <input type="radio" id="normal" name="difficulty" value="7">
+    <label for="normal">Normal</label>
+    <input type="radio" id="easy" name="difficulty" value="10" checked>
+    <label for="easy">Easy</label><br>
     <button onclick="start()">Start</button>
     <button onclick="stop()">Stop</button>
-    <p id="info">Time: <span id="timer">0:00<span>, Score: <span id="score">0</span>/50</p>
+    <p id="info">Time: <span id="timer">0:00</span>, Score: <span id="score">0</span>/50</p>
     <p id="current-state">Press "Start" to begin.</p>
     <button onclick="previous()">Prev</button>
     <button onclick="next()">Next</button>
