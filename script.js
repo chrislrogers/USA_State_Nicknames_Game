@@ -57,7 +57,7 @@ const currentState = document.getElementById('current-state');
 
 let nicknames = [];
 let isPlaying = false;
-let currentName = 0;
+let nameIndex = 0;
 
 let timeLimit = 10; //time to complete in minutes
 let time;
@@ -65,7 +65,7 @@ let timerInterval;
 
 function start() {
     if (!isPlaying) {
-        currentName = 0;
+        nameIndex = 0;
         isPlaying = true;
         nicknames = [];
         for (let i in valueMap) {
@@ -77,7 +77,7 @@ function start() {
         time = timeLimit * 60;
         timerInterval = setInterval(getTime, 1000);
         score.innerHTML = "0";
-        currentState.innerHTML = nicknames[currentName];
+        currentState.innerHTML = nicknames[nameIndex];
     }
 }
 
@@ -92,15 +92,15 @@ function stop() {
 function check(guess) {
     if (isPlaying) {
         for (let key of Object.keys(valueMap)) {
-            if ((key === guess) && (valueMap[key] === nicknames[currentName])) {
+            if ((key === guess) && (valueMap[key] === nicknames[nameIndex])) {
                 console.log("Correct");
-                nicknames.splice(currentName, 1);
+                nicknames.splice(nameIndex, 1);
                 document.getElementById(guess).style.backgroundColor = "#4CAF52";
-                if (currentName > nicknames.length - 1) {
-                    /* sets currentName to the last available nickname if the value is higher than it's length.
+                if (nameIndex > nicknames.length - 1) {
+                    /* sets nameIndex to the last available nickname if the value is higher than it's length.
                      * this prevents the player seeing 'undefined' if they guess the last nickname correctly.
                      */
-                    currentName = nicknames.length - 1;
+                    nameIndex = nicknames.length - 1;
                 }
                 break;
             }
@@ -110,7 +110,7 @@ function check(guess) {
             isPlaying = false;
             clearInterval(timerInterval);
         } else {
-            currentState.innerHTML = nicknames[currentName];
+            currentState.innerHTML = nicknames[nameIndex];
         }
         score.innerHTML = 50 - nicknames.length;
     }
@@ -118,18 +118,18 @@ function check(guess) {
 
 function previous() {
     if (isPlaying) {
-        if (currentName !== 0) {
-            currentName--;
-            currentState.innerHTML = nicknames[currentName];
+        if (nameIndex !== 0) {
+            nameIndex--;
+            currentState.innerHTML = nicknames[nameIndex];
         }
     }
 }
 
 function next() {
     if (isPlaying) {
-        if (currentName < nicknames.length - 1) {
-            currentName++;
-            currentState.innerHTML = nicknames[currentName];
+        if (nameIndex < nicknames.length - 1) {
+            nameIndex++;
+            currentState.innerHTML = nicknames[nameIndex];
         }
     }
 }
