@@ -3,7 +3,7 @@ const valueMap = {
     , "Alaska": "The Last Frontier"
     , "Arizona": "Grand Canyon State"
     , "Arkansas": "The Natural State"
-    , "Californa": "The Golden State"
+    , "California": "The Golden State"
     , "Colorado": "Centennial State"
     , "Connecticut": "Constitution State"
     , "Delaware": "The First State"
@@ -52,20 +52,76 @@ const valueMap = {
 }
 
 const timer = document.getElementById('timer');
+const score = document.getElementById('score');
 const currentState = document.getElementById('current-state');
 
+let nicknames = [];
 let isPlaying = false;
+let currentName = 0;
 
 function start() {
     if (!isPlaying) {
-        alert("start");
+        currentName = 0;
         isPlaying = true;
+        nicknames = [];
+        for(let i in valueMap) {
+            nicknames.push(valueMap[i]);
+            document.getElementById(i).style.backgroundColor = "#efefef";
+        }
+        shuffle();
+        score.innerHTML = "0";
+        currentState.innerHTML = nicknames[currentName];
     }
 }
 
 function stop() {
     if (isPlaying) {
-        alert("stop");
         isPlaying = false;
+        currentState.innerHTML = "Press \"Start\" to begin.";
+    }
+}
+
+function check(guess) {
+    for (let key of Object.keys(valueMap)) {
+        if ((key === guess) && (valueMap[key] === nicknames[currentName])) {
+            console.log("Correct");
+            nicknames.splice(currentName,1);
+            document.getElementById(guess).style.backgroundColor = "#4CAF52";
+            if (currentName > nicknames.length - 1) {
+                /* sets currentName to the last available nickname if the value is higher than it's length.
+                 * this prevents the player seeing 'undefined' if they guess the last nickname correctly.
+                 */ 
+                currentName = nicknames.length - 1;
+            }
+            break;
+        }
+    }
+    if (nicknames.length === 0) {
+        currentState.innerHTML = "You got them all!";
+        isPlaying = false;
+    } else {
+        currentState.innerHTML = nicknames[currentName];
+    }
+    score.innerHTML = 50-nicknames.length;
+}
+
+function previous() {
+    if (currentName !== 0) {
+        currentName--;
+        currentState.innerHTML = nicknames[currentName];
+    }
+}
+
+function next() {
+    if (currentName < nicknames.length - 1) {
+        currentName++;
+        currentState.innerHTML = nicknames[currentName];
+    }
+}
+
+function shuffle() {
+    for (let i = nicknames.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [nicknames[i], nicknames[j]] = [nicknames[j], nicknames[i]];
     }
 }
