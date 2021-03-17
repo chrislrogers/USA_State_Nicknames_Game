@@ -64,7 +64,7 @@ function start() {
         currentName = 0;
         isPlaying = true;
         nicknames = [];
-        for(let i in valueMap) {
+        for (let i in valueMap) {
             nicknames.push(valueMap[i]);
             document.getElementById(i).style.backgroundColor = "#efefef";
         }
@@ -82,40 +82,46 @@ function stop() {
 }
 
 function check(guess) {
-    for (let key of Object.keys(valueMap)) {
-        if ((key === guess) && (valueMap[key] === nicknames[currentName])) {
-            console.log("Correct");
-            nicknames.splice(currentName,1);
-            document.getElementById(guess).style.backgroundColor = "#4CAF52";
-            if (currentName > nicknames.length - 1) {
-                /* sets currentName to the last available nickname if the value is higher than it's length.
-                 * this prevents the player seeing 'undefined' if they guess the last nickname correctly.
-                 */ 
-                currentName = nicknames.length - 1;
+    if (isPlaying) {
+        for (let key of Object.keys(valueMap)) {
+            if ((key === guess) && (valueMap[key] === nicknames[currentName])) {
+                console.log("Correct");
+                nicknames.splice(currentName, 1);
+                document.getElementById(guess).style.backgroundColor = "#4CAF52";
+                if (currentName > nicknames.length - 1) {
+                    /* sets currentName to the last available nickname if the value is higher than it's length.
+                     * this prevents the player seeing 'undefined' if they guess the last nickname correctly.
+                     */
+                    currentName = nicknames.length - 1;
+                }
+                break;
             }
-            break;
         }
+        if (nicknames.length === 0) {
+            currentState.innerHTML = "You got them all!";
+            isPlaying = false;
+        } else {
+            currentState.innerHTML = nicknames[currentName];
+        }
+        score.innerHTML = 50 - nicknames.length;
     }
-    if (nicknames.length === 0) {
-        currentState.innerHTML = "You got them all!";
-        isPlaying = false;
-    } else {
-        currentState.innerHTML = nicknames[currentName];
-    }
-    score.innerHTML = 50-nicknames.length;
 }
 
 function previous() {
-    if (currentName !== 0) {
-        currentName--;
-        currentState.innerHTML = nicknames[currentName];
+    if (isPlaying) {
+        if (currentName !== 0) {
+            currentName--;
+            currentState.innerHTML = nicknames[currentName];
+        }
     }
 }
 
 function next() {
-    if (currentName < nicknames.length - 1) {
-        currentName++;
-        currentState.innerHTML = nicknames[currentName];
+    if (isPlaying) {
+        if (currentName < nicknames.length - 1) {
+            currentName++;
+            currentState.innerHTML = nicknames[currentName];
+        }
     }
 }
 
